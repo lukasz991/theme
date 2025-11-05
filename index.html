@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Lukasz — Dual Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* INSTINCT MODE */
+  --ki-blue:#aee8ff;
+  --ki-white:#fefeff;
+  --bg-dark:#060b14;
+  --text-instinct:#f7fbff;
+
+  /* SILVER GLASS */
+  --silver-light:#C0C0C0;
+  --silver-dark:#70706F;
+  --text-silver:#ffffff;
+  --glassA: rgba(255,255,255,.10);
+  --glassB: rgba(255,255,255,.20);
+}
+
+/* RESET */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',sans-serif;
+  background:#000;
+  overflow:hidden;
+}
+
+/* VIEWPORT */
+.viewport{
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  position:relative;
+}
+.wrapper{
+  display:flex;
+  height:100%;
+  transition:transform .8s ease-in-out;
+}
+.panel{
+  min-width:100vw;
+  height:100vh;
+  position:relative;
+}
+
+/* PRZEŁĄCZNIK */
+.switch{
+  position:fixed;
+  top:18px;
+  right:26px;
+  display:flex;
+  gap:12px;
+  background:rgba(255,255,255,0.08);
+  padding:6px 16px;
+  border-radius:999px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 18px rgba(150,220,255,0.35);
+  z-index:9999;
+}
+.switch button{
+  background:none;
+  border:none;
+  color:#bfeaff;
+  font-weight:600;
+  font-size:13px;
+  cursor:pointer;
+  transition:.25s;
+}
+.switch button:hover,
+.switch button.active{
+  color:#fff;
+  text-shadow:0 0 10px #aee8ff;
+}
+
+/* ================= INSTINCT MODE ================= */
+.instinct{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--text-instinct);
+  background:radial-gradient(circle at center,#10182c 0%,#060b14 70%,#03050a 100%);
+  position:relative;
+  perspective:900px;
+}
+.instinct canvas#bg-instinct{
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  opacity:.5;
+  filter:blur(0.4px);
+}
+.instinct .field{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  animation:float 6s ease-in-out infinite alternate;
+}
+@keyframes float{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
+.instinct .avatar{
+  position:relative;
+  width:240px;
+  height:240px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+}
+.instinct .avatar img{
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  z-index:3;
+  box-shadow:0 0 30px rgba(255,255,255,.6),
+             0 0 60px rgba(110,220,255,.4);
+}
+.instinct .avatar::before{
+  content:"";
+  position:absolute;
+  inset:-5%;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,
+    rgba(110,200,255,.3),
+    rgba(255,255,255,.5),
+    rgba(110,200,255,.3),
+    rgba(150,220,255,.2));
+  filter:blur(3px);
+  animation:auraRotate 12s linear infinite;
+}
+@keyframes auraRotate{to{transform:rotate(360deg)}}
+.instinct .avatar::after{
+  content:"";
+  position:absolute;
+  inset:-12%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(150,220,255,.3),transparent 70%);
+  filter:blur(10px);
+}
+.instinct .name{
+  margin-top:22px;
+  font-size:38px;
+  font-weight:800;
+  background:linear-gradient(90deg,#eaf8ff,#aee8ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 22px rgba(180,220,255,.5);
+}
+.instinct .bio{
+  margin-top:12px;
+  max-width:420px;
+  line-height:1.7;
+  font-size:15px;
+  color:rgba(240,250,255,.9);
+  text-shadow:0 0 6px rgba(140,200,255,.25);
+}
+.instinct footer{
+  position:fixed;
+  bottom:10px;
+  width:100%;
+  text-align:center;
+  font-size:11px;
+  opacity:.55;
+  color:#b0c9ff;
+}
+
+/* ================= SILVER GLASS ================= */
+.silver{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  color:var(--text-silver);
+  background:radial-gradient(circle at center,#0a0a0a 0%,#161616 100%);
+  overflow:hidden;
+  position:relative;
+}
+
+/* TŁO — DYM */
+.silver::before{
+  content:"";
+  position:absolute;
+  top:-10%; left:-10%;
+  width:120%; height:120%;
+  z-index:0;
+  background:url("https://xatimg.com/image/0IKdQP7v5SvD.gif") center/cover no-repeat;
+  filter:blur(5px) brightness(.8);
+  opacity:.25;
+  animation:fog 40s ease-in-out infinite alternate;
+}
+@keyframes fog{50%{transform:translate(10px,-8px) scale(1.03)}}
+
+/* KARTA */
+.silver .ribbon{
+  position:relative;
+  z-index:1;
+  width:min(900px,94vw);
+  border-radius:24px;
+  background:linear-gradient(180deg,rgba(100,100,100,.15),rgba(40,40,40,.25));
+  border:1px solid var(--glassB);
+  backdrop-filter:blur(14px);
+  box-shadow:
+    0 0 25px rgba(192,192,192,.15),
+    0 0 45px rgba(112,112,111,.25),
+    inset 0 0 12px rgba(255,255,255,.05);
+  padding:24px 28px 32px;
+  transition:.6s ease;
+}
+.silver .ribbon:hover{box-shadow:0 0 50px rgba(192,192,192,.25)}
+
+/* AVATAR */
+.silver .core{
+  position:relative;
+  width:240px;
+  height:240px;
+  margin:10px auto 0;
+  display:grid;
+  place-items:center;
+}
+.silver .core::before{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:190px;height:190px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.35) 0%,rgba(255,255,255,.12) 40%,rgba(255,255,255,0) 70%);
+  opacity:.7;filter:blur(2px);
+}
+.silver .core-rings{position:absolute;inset:0;z-index:0}
+.silver .core-rings .ring{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:2px solid rgba(192,192,192,.9);
+  box-shadow:0 0 16px rgba(192,192,192,.45),0 0 28px rgba(112,112,111,.25);
+  animation:ringPulse 7s ease-in-out infinite;
+}
+.silver .core-rings .ring-1{width:170px;height:170px;opacity:.95;}
+.silver .core-rings .ring-2{width:188px;height:188px;opacity:.6;animation-duration:8s;}
+.silver .core-rings .ring-3{width:208px;height:208px;opacity:.4;animation-duration:9.5s;}
+.silver .core-rings .ring-4{width:226px;height:226px;opacity:.25;animation-duration:11s;}
+@keyframes ringPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+.silver .core img{
+  width:160px;height:160px;border-radius:50%;
+  box-shadow:0 0 22px rgba(192,192,192,.55);
+  z-index:1;position:relative;
+}
+
+/* TEKSTY */
+.silver .name{
+  margin-top:22px;text-align:center;
+  font-size:36px;font-weight:800;
+  background:linear-gradient(90deg,#C0C0C0 0%,#70706F 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:0 0 15px rgba(192,192,192,.3);
+}
+.silver .bio{
+  background:var(--glassA);
+  border:1px solid var(--glassB);
+  border-radius:16px;
+  padding:14px 18px;
+  line-height:1.75;
+  margin:26px auto 18px;
+  width:78%;
+  text-align:center;
+  box-shadow:inset 0 0 15px rgba(255,255,255,.05);
+}
+
+/* STOPKA */
+.silver footer{text-align:center;opacity:.65;font-size:12px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="switch">
+  <button data-slide="0" class="active">Instinct Mode</button>
+  <button data-slide="1">Silver Glass</button>
+</div>
+
+<div class="viewport">
+  <div class="wrapper" id="wrapper">
+
+    <!-- INSTINCT MODE -->
+    <section class="panel instinct">
+      <canvas id="bg-instinct"></canvas>
+      <section class="field">
+        <div class="avatar"><img src="https://xatimg.com/image/7DKiHbhcCvvv.png" alt="Lukasz"></div>
+        <div class="name">Lukasz</div>
+        <div class="bio">
+          W moich żyłach płynie mrok, a moje serce bije w rytm piekielnego tańca.
+          Moje słowa są niczym ostrza. Przyciągam i odpycham, intryguję i przerażam.
+          Jestem zagadką, którą trudno rozwikłać.
+        </div>
+      </section>
+      <footer>Instinct Mode</footer>
+    </section>
+
+    <!-- SILVER GLASS -->
+    <section class="panel silver">
+      <main class="ribbon">
+        <div class="core">
+          <div class="core-rings">
+            <span class="ring ring-1"></span>
+            <span class="ring ring-2"></span>
+            <span class="ring ring-3"></span>
+            <span class="ring ring-4"></span>
+          </div>
+          <img src="https://xatimg.com/image/7DKiHbhcCvvv.png" alt="avatar">
+        </div>
+
+        <div class="name">Lukasz</div>
+        <div class="bio">
+          W moich żyłach płynie mrok, a moje serce bije w rytm piekielnego tańca.<br>
+          Myśli mam ostre jak brzytwa, a słowa tną jak stal.<br>
+          Jestem zagadką, którą trudno rozwikłać.
+        </div>
+
+        <footer>Silver Glass</footer>
+      </main>
+    </section>
+
+  </div>
+</div>
+
+<script>
+/* PRZEŁĄCZANIE TRYBÓW */
+const wrapper=document.getElementById('wrapper');
+const buttons=document.querySelectorAll('.switch button');
+buttons.forEach((btn,i)=>{
+  btn.addEventListener('click',()=>{
+    buttons.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    wrapper.style.transform='translateX(-'+(i*100)+'vw)';
+  });
+});
+
+/* TŁO KI — INSTINCT MODE */
+const c=document.getElementById('bg-instinct');
+const ctx=c.getContext('2d');
+let W,H,lines=[];
+function resize(){
+  W=c.width=innerWidth;H=c.height=innerHeight;
+  const count=Math.floor(W/24)+16;
+  lines=[];
+  for(let i=0;i<count;i++){
+    lines.push({x:Math.random()*W,y:Math.random()*H,len:40+Math.random()*140,speed:0.7+Math.random()*1.4,glow:0.4+Math.random()*0.6});
+  }
+}
+window.addEventListener('resize',resize);
+resize();
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+  for(const l of lines){
+    const grad=ctx.createLinearGradient(l.x,l.y,l.x,l.y-l.len);
+    grad.addColorStop(0,'rgba(100,180,255,0)');
+    grad.addColorStop(0.5,'rgba(200,240,255,'+(0.4*l.glow)+')');
+    grad.addColorStop(1,'rgba(255,255,255,'+(0.6*l.glow)+')');
+    ctx.strokeStyle=grad;ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x,l.y-l.len);ctx.stroke();
+    l.y+=-l.speed;if(l.y+l.len<0){l.y=H+Math.random()*100;l.x=Math.random()*W;}
+  }
+  ctx.globalCompositeOperation='source-over';
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
