@@ -51,10 +51,11 @@ body{
 /* PRZEŁĄCZNIK */
 .switch{
   position:fixed;
-  top:28px;
-  right:26px;
+  bottom:23px;          /* odległość od dołu */
+  left:50%;             /* środek poziomy */
+  transform:translateX(-50%); /* wyśrodkowanie */
   display:flex;
-  gap:15px;
+  gap:12px;
   background:rgba(255,255,255,0.08);
   padding:6px 16px;
   border-radius:999px;
